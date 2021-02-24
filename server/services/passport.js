@@ -24,9 +24,10 @@ passport.use(
             callbackURL: '/auth/google/callback'
         },
         (accessToken, refreshToken, profile, done) => {
-            User.findOne({ googleId: profile.id })
+            User.findOne({ googleId: profile.id }) // queries db for googleId matching profile.id
                 .then((existingUser) => {
-                    if (existingUser) { // means we already have a record with this id
+                    if (existingUser) { // means user alreadt exists, do not create a new one
+                        // console.log(existingUser)
                         done(null, existingUser);
                     } else { // creates a new user with the profile id
                         new User({ googleId: profile.id })
